@@ -15,12 +15,12 @@ const boxStyle = {
     marginRight: 10
 }
 
-export default function ConnectionInfo() {
+export default function ConnectionInfo(props) {
     const [status, setStatus] = useState('NOT CONNECTED');
     const [host, setHost] = useState('localhost');
     const [database, setDatabase] = useState('tests');
-    const [user, setUser] = useState('');
-    const [password, setPassword] = useState('');
+    const [user, setUser] = useState('root');
+    const [password, setPassword] = useState('washywashy');
 
     function somethingChanged(e) {
         let key = e.code || "";
@@ -43,6 +43,7 @@ export default function ConnectionInfo() {
     async function connectToMysql(e) {
         let connectionStatus = await backend.connect({ host, database, user, password });
         setStatus(connectionStatus ? STATUS_CONNECTED : STATUS_NOT_CONNECTED);
+        props.callSetQueryOk(connectionStatus);
     }
 
     return (
