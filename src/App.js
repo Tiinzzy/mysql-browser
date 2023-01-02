@@ -1,7 +1,10 @@
-import { renderMainPage } from './front-end/front-end';
+import MainPage from './front-end/MainPage';
 
 function App() {
-  return renderMainPage();
+  return (
+    <>
+      <MainPage />
+    </>)
 }
 
 export default App;
