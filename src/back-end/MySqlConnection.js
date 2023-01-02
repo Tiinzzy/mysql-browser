@@ -2,18 +2,31 @@ const mysql = require('mysql2');
 
 class MySqlConnectionImpl {
     #connection = null;
+    #connectionInfo = {};
+
+    async executeSql(params) {
+        this.#open();
+
+        return this.#connection.promise()
+            .query(params.sql)
+            .then(([rows, fields]) => {
+                return { eror: null, rows }
+            })
+            .catch((error) => {
+                this.#connection.end();
+                return { error: error.message, rows: [] };
+            }).finally(() => {
+                this.#connection.end();
+            });
+    }
 
     async connect(params) {
-        if (this.#connection !== null) {
-            this.#connection.end();
-        }
+        this.#connectionInfo.host = params.host;
+        this.#connectionInfo.user = params.user;
+        this.#connectionInfo.password = params.password;
+        this.#connectionInfo.database = params.database;
 
-        this.#connection = mysql.createConnection({
-            host: params.host,
-            user: params.user,
-            password: params.password,
-            database: params.database
-        });
+        this.#open();
 
         return this.#connection.promise()
             .query('select 1 as result from dual;')
@@ -22,10 +35,19 @@ class MySqlConnectionImpl {
             })
             .catch((error) => {
                 console.log(error);
-                this.#connection.end();
-                this.#connection = null;
                 return false;
+            }).finally(() => {
+                this.#connection.end();
             });
+    }
+
+    #open() {
+        this.#connection = mysql.createConnection({
+            host: this.#connectionInfo.host,
+            user: this.#connectionInfo.user,
+            password: this.#connectionInfo.password,
+            database: this.#connectionInfo.database
+        });
     }
 
     close() {
