@@ -10,26 +10,26 @@ class DisplayData extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            table: ''
-
+            createTable: ''
         }
+
         this.callDisplayData = this.callDisplayData.bind(this);
         shared.callDisplayData = this.callDisplayData;
     }
 
     callDisplayData(message) {
         if (message.action === 'data-ready-for-display') {
-            this.setState({ data: message.data });
+            this.setState({ data: message.data, createTable: '' });
 
             let size = message.data.length;
             if (size > 1000) {
-                this.setState({ data: message.data.slice(0, 1001) });
+                this.setState({ data: message.data.slice(0, 1001), createTable: '' });
             }
 
             let tblCrt = message.data[0];
             if (Object.keys(tblCrt)[1].indexOf('Create Table') > -1) {
-                this.setState({ table: Object.values(tblCrt)[1] }, function () {
-                    this.setState({data: null})
+                this.setState({ createTable: Object.values(tblCrt)[1] }, function () {
+                    this.setState({ data: null })
                 });
             }
 
@@ -56,7 +56,8 @@ class DisplayData extends React.Component {
                             ))}
                         </tbody>
                     </table>}
-                {this.state.table}
+
+                {this.state.createTable}
             </Box>
         );
     }
