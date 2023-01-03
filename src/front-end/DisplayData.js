@@ -17,8 +17,14 @@ class DisplayData extends React.Component {
     }
 
     callDisplayData(message) {
+        console.log(message.data.length)
         if (message.action === 'data-ready-for-display') {
             this.setState({ data: message.data });
+
+            let size = message.data.length;
+            if (size > 1000) {
+                this.setState({ data: message.data.slice(0,1001) });
+            }
         }
     }
 
@@ -48,3 +54,5 @@ class DisplayData extends React.Component {
     }
 }
 export default DisplayData;
+
+//style={{border: 'solid 1px red', padding: 10, width: 1360, height: 400}}
