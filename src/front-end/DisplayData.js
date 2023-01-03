@@ -3,6 +3,7 @@ import React from "react";
 import Box from '@mui/material/Box';
 
 import { shared } from './shared';
+import './style.css';
 
 class DisplayData extends React.Component {
 
@@ -25,15 +26,15 @@ class DisplayData extends React.Component {
         return (
             <Box>
                 {this.state.data &&
-                    <table style={{ border: 'solid 1px black', padding: 20 }}>
-                        <tbody>
-                            <tr key={"header"} margin="20px">
+                    <table>
+                        <tbody >
+                            <tr key={"header"}>
                                 {Object.keys(this.state.data[0]).map((e) => (
                                     <th>{e}</th>
                                 ))}
                             </tr>
                             {this.state.data.map((e, i) => (
-                                <tr key={i} style={{ border: 'solid 1px black' }} margin="20px">
+                                <tr key={i} id='data'>
                                     {Object.values(e).map((val) => (
                                         <td>{val}</td>
                                     ))}
