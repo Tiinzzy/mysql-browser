@@ -22,7 +22,7 @@ export default function QueryWindow() {
 
     async function executeSql() {
         let result = await backend.executeSql({ sql });
-        console.log(result);
+        console.log(result.rows);
         shared.callDisplayData({ action: 'data-ready-for-display', data: result.rows })
         if (result.error) {
             console.log(result.error);
