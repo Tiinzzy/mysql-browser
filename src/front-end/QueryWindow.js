@@ -44,7 +44,7 @@ export default function QueryWindow() {
             <Box display='flex'>
                 <Button style={{ marginTop: 27.5 }} variant="outlined" onClick={() => executeSql()}>Execute</Button>
                 <Box flexGrow={1} mt={4} ml={4} color='red'>
-                <Typography alignItems='center'> {error} </Typography>
+                    <Typography alignItems='center'> {error} </Typography>
                 </Box>
             </Box>
 
