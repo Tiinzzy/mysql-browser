@@ -63,7 +63,7 @@ export default function ConnectionInfo(props) {
                 </Box>
                 <Box style={boxStyle}>
                     <div>Password:</div>
-                    <TextField name='password' variant="outlined" type='password1' value={password}
+                    <TextField name='password' variant="outlined" type='password' value={password}
                         onKeyDown={(e) => somethingChanged(e)}
                         onChange={(e) => somethingChanged(e)} />
                 </Box>
