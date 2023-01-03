@@ -43,7 +43,7 @@ class DisplayData extends React.Component {
                 if (isCreateTable) {
                     let tblCrt = message.data[0];
                     this.setState({ createTable: Object.values(tblCrt)[1] }, function () {
-                        this.setState({ data: null })
+                        this.setState({ data: null });
                     });
                 }
             }

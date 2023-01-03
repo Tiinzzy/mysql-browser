@@ -25,7 +25,7 @@ export default function QueryWindow() {
     async function executeSql() {
         let result = await backend.executeSql({ sql });
         setErrorMsg(result.error);
-        shared.callDisplayData({ action: 'data-ready-for-display', data: result.rows })
+        shared.callDisplayData({ action: 'data-ready-for-display', data: result.rows });
         if (result.error) {
             console.log(result.error);
         }
@@ -51,7 +51,6 @@ export default function QueryWindow() {
             <Divider sx={{ mt: 2, mb: 2 }} />
 
             <DisplayData />
-
         </>
     );
 }
