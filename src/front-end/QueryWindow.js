@@ -16,7 +16,7 @@ const backend = BackEndConnection.INSTANCE();
 
 export default function QueryWindow() {
     const [sql, setSql] = useState('select 1 from dual');
-    const [error, setError] = useState('select 1 from dual');
+    const [errorMsg, setErrorMsg] = useState('');
 
     function sqlChanged(e) {
         setSql(e.target.value);
@@ -24,7 +24,7 @@ export default function QueryWindow() {
 
     async function executeSql() {
         let result = await backend.executeSql({ sql });
-        setError(result.error);
+        setErrorMsg(result.error);
         shared.callDisplayData({ action: 'data-ready-for-display', data: result.rows })
         if (result.error) {
             console.log(result.error);
@@ -44,7 +44,7 @@ export default function QueryWindow() {
             <Box display='flex'>
                 <Button style={{ marginTop: 27.5 }} variant="outlined" onClick={() => executeSql()}>Execute</Button>
                 <Box flexGrow={1} mt={4} ml={4} color='red'>
-                    <Typography alignItems='center'> {error} </Typography>
+                    <Typography alignItems='center'> {errorMsg} </Typography>
                 </Box>
             </Box>
 
