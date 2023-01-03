@@ -25,7 +25,7 @@ export default function ConnectionInfo(props) {
     function somethingChanged(e) {
         let key = e.code || "";
         let isEnter = key.toLowerCase().indexOf('enter') >= 0;
-       
+
         if (e.target.name === 'host') {
             setHost(e.target.value);
         } else if (e.target.name === 'database') {
@@ -63,7 +63,7 @@ export default function ConnectionInfo(props) {
                 </Box>
                 <Box style={boxStyle}>
                     <div>Password:</div>
-                    <TextField name='password' variant="outlined" type='password1' value={password}
+                    <TextField name='password' variant="outlined" type='password' value={password}
                         onKeyDown={(e) => somethingChanged(e)}
                         onChange={(e) => somethingChanged(e)} />
                 </Box>
@@ -72,7 +72,7 @@ export default function ConnectionInfo(props) {
                 </Box>
             </Box>
             <Box sx={{ mt: 2 }}>
-                Connection Status: <span style={{ color: status === STATUS_CONNECTED ? 'green' : 'red' }}> {status} </span>
+                Connection Status: <span style={{ color: status === STATUS_CONNECTED ? 'green' : 'red', marginLeft: 10 }}> {status} </span>
             </Box>
         </>
     );

@@ -1,0 +1,35 @@
+table {
+    border: solid 1px black;
+    border-radius: 2px;
+    padding: 4px;
+    background-color: #fbfafa;
+    width: 100%;
+}
+
+tbody {
+    padding: 10px;
+}
+
+th {
+    text-align: left;
+    border: solid 1px black;
+    border-radius: 2px;
+    padding: 10px;
+    padding-right: 20px;
+    position: sticky;
+}
+
+tr {
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #eaeaea;
+}
+
+td {
+    text-align: left;
+    border: solid 1px black;
+    border-radius: 2px;
+    padding: 10px;
+}
