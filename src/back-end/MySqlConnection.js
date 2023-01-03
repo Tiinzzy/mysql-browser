@@ -7,8 +7,13 @@ class MySqlConnectionImpl {
     async executeSql(params) {
         this.#open();
 
+        let safeSql = params.sql;
+        if (safeSql.trim().toLowerCase().startsWith("select")) {
+            safeSql = 'select * from (\n' + safeSql + '\n) SAFE_TABLE_LOW_ROWS limit 1000';
+        }
+        
         return this.#connection.promise()
-            .query(params.sql)
+            .query(safeSql)
             .then(([rows, fields]) => {
                 return { eror: null, rows }
             })
