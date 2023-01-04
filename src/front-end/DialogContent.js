@@ -22,7 +22,7 @@ class DialogContent extends React.Component {
     render() {
         return (
             <Box>
-                <DialogTitle disableTypography style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <DialogTitle style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Box style={{fontWeight:'bold'}}>Important</Box>
                     <Box style={{ border: 'solid 1px black', height: 30, width: 30, textAlign: 'center', cursor: 'pointer' }} onClick={(e) => this.closeDialog()}>X</Box>
                 </DialogTitle>
