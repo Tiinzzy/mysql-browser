@@ -16,10 +16,11 @@ import { shared } from './shared';
 
 const backend = BackEndConnection.INSTANCE();
 
-export default function QueryWindow() {
+export default function QueryWindow(props) {
     const [sql, setSql] = useState('select 1 from dual');
     const [errorMsg, setErrorMsg] = useState('');
     const [openDialog, setOpenDialog] = useState(false);
+    const [checkBox, setCheckBox] = useState(false);
 
     function sqlChanged(e) {
         setSql(e.target.value);
@@ -33,10 +34,17 @@ export default function QueryWindow() {
             console.log(result.error);
         }
         setOpenDialog(true);
+
+        if (checkBox) {
+            setOpenDialog(false);
+        };
     }
 
-    function handleCloseDialog() {
+    function handleCloseDialog(message) {
         setOpenDialog(false);
+        if (message.status === true) {
+            setCheckBox(true);
+        }
     }
 
     return (
@@ -61,7 +69,7 @@ export default function QueryWindow() {
             <DisplayData />
 
             {openDialog && <Dialog onClose={() => handleCloseDialog()} open={openDialog} maxWidth='sm' >
-            <DialogContent handleCloseDialog={handleCloseDialog}/>
+                <DialogContent handleCloseDialog={handleCloseDialog} />
             </Dialog>}
 
         </>
