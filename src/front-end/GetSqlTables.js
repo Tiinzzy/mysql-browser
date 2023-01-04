@@ -22,19 +22,18 @@ class GetSqlTables extends React.Component {
 
     render() {
         return (
-
             <>
                 <Box style={{ paddingTop: 15, paddingLeft: 20, paddingRight: 30 }}>
                     Availabe Tables
-                    {this.state.tables && this.state.tables.map((e, i) =>
-                        < ul key={i} >
-                            {Object.values(e).map((val, j) => (
-                                <li key={j}>{val}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
                 </Box>
+                {this.state.tables && this.state.tables.map((e, i) =>
+                    < ul key={i} >
+                        {Object.values(e).map((val, j) => (
+                            <li key={j} style={{spacing:'compact'}} >{val}
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </>
         );
     }
