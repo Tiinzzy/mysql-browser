@@ -16,8 +16,8 @@ export default function MainPage() {
     }
 
     return (
-        <Box style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
-            <Box style={{ border: 'solid 1px black', display: 'flex', flexDirection: 'column', marginLeft: 20, marginTop: 28, height: '340px' }}>
+        <Box style={{ display: 'flex', flexDirection: 'row', marginTop: 10, marginLeft: 10, marginRight: 10 }}>
+            <Box style={{ overflowY: 'scroll', border: 'solid 1px #eaeaea', borderRadius: 3, display: 'flex', flexDirection: 'column', marginTop: 28, height: '385px' }}>
                 <GetSqlTables />
             </Box>
             <div style={{ margin: 10 }}>
