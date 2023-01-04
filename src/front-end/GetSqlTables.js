@@ -1,36 +1,42 @@
 import React from "react";
-import { useState } from 'react';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 
-import BackEndConnection from './BackEndConnection';
-const backend = BackEndConnection.INSTANCE();
+import { shared } from './shared';
 
-export default function GetSqlTables() {
-    const [sqlMsg, setSqlMsg] = useState('show tables');
-    const [tables, setTables] = useState(null);
+class GetSqlTables extends React.Component {
 
-    async function getSqlTables() {
-        let result = await backend.getSqlTables({ sqlMsg });
-        setTables(result.rows);
-        if (result.error) {
-            console.log(result.error);
+    constructor(props) {
+        super(props);
+        this.state = {
+        }
+        this.callGetSqlTables = this.callGetSqlTables.bind(this);
+        shared.callGetSqlTables = this.callGetSqlTables;
+    }
+
+    callGetSqlTables(message) {
+        if (message.action === 'available-tables') {
+            this.setState({ tables: message.data });
         }
     }
 
-    return (
-        <Box styel={{ display: 'flex' }}>
-            <Button style={{ marginTop: 15, marginLeft: 15, marginRight: 15 }} variant="text" onClick={() => getSqlTables()}>Availabe Tables</Button>
-            {tables !== null && tables.map((e, i) =>
-                <ul key={i}>
-                    {Object.values(e).map((val, j) => (
-                        <li key={j}>{val}
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </Box>
-    );
+    render() {
+        return (
 
-};
+            <>
+                <Box style={{ paddingTop: 15, paddingLeft: 20, paddingRight: 30 }}>
+                    Availabe Tables
+                    {this.state.tables && this.state.tables.map((e, i) =>
+                        < ul key={i} >
+                            {Object.values(e).map((val, j) => (
+                                <li key={j}>{val}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </Box>
+            </>
+        );
+    }
+}
+export default GetSqlTables;
