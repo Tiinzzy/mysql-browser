@@ -73,7 +73,7 @@ class DisplayData extends React.Component {
                     </table>}
 
                 {createTable2Lines(this.state.createTable).map((l, i) => (
-                    <div key={i}>
+                    <div key={i} style={{paddingTop: 15, paddingLeft: 15}}>
                         {l}
                     </div>
                 ))}
