@@ -5,6 +5,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
+import { shared } from './shared';
+
 import BackEndConnection from './BackEndConnection';
 const backend = BackEndConnection.INSTANCE();
 
@@ -21,6 +23,7 @@ export default function ConnectionInfo(props) {
     const [database, setDatabase] = useState('tests');
     const [user, setUser] = useState('root');
     const [password, setPassword] = useState('washywashy');
+    const [sqlMsg, setSqlMsg] = useState('show tables');
 
     function somethingChanged(e) {
         let key = e.code || "";
@@ -44,6 +47,12 @@ export default function ConnectionInfo(props) {
         let connectionStatus = await backend.connect({ host, database, user, password });
         setStatus(connectionStatus ? STATUS_CONNECTED : STATUS_NOT_CONNECTED);
         props.callSetQueryOk(connectionStatus);
+
+        let result = await backend.getSqlTables({ sqlMsg });
+        if (result.error) {
+            console.log(result.error);
+        }
+        shared.callGetSqlTables({ action: 'available-tables', data: result.rows });
     }
 
     return (
