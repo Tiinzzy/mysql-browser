@@ -12,6 +12,8 @@ import BackEndConnection from './BackEndConnection';
 import DisplayData from './DisplayData';
 import DialogContent from './DialogContent';
 
+import { SIZES } from './functions';
+
 import { shared } from './shared';
 
 const backend = BackEndConnection.INSTANCE();
@@ -48,18 +50,20 @@ export default function QueryWindow(props) {
     }
 
     return (
-        <>
+        <Box >
             <Box>
-                <TextField name='sql' variant="outlined"
-                    fullWidth
+                <TextField style={{ width: SIZES.getRightBoxWidth() }}
+                    name='sql'
+                    variant="outlined"
                     value={sql}
                     multiline
-                    rows={10}
+                    rows={8}
                     onChange={(e) => sqlChanged(e)} />
             </Box>
+
             <Box display='flex'>
                 <Button style={{ marginTop: 15 }} variant="outlined" onClick={() => executeSql()}>Execute</Button>
-                <Box flexGrow={1} mt={4} ml={4} color='red'>
+                <Box style={{ marginLeft: 20, marginTop: 20 }} color='red'>
                     <Typography alignItems='center'> {errorMsg} </Typography>
                 </Box>
             </Box>
@@ -67,11 +71,10 @@ export default function QueryWindow(props) {
             <Divider sx={{ mt: 2, mb: 2 }} />
 
             <DisplayData />
-
+            
             {openDialog && <Dialog onClose={() => handleCloseDialog()} open={openDialog} maxWidth='sm' >
                 <DialogContent handleCloseDialog={handleCloseDialog} />
             </Dialog>}
-
-        </>
+        </Box>
     );
 }

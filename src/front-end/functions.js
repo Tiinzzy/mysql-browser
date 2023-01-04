@@ -1,3 +1,13 @@
+export const SIZES = {
+    minHeight: 720,
+    leftBoxWidth: 300,
+    getRightBoxWidth: function() {
+        let width = window.innerWidth - 40;
+        return width - this.leftBoxWidth;
+    },
+    minWidth: 1280
+};
+
 export function createTable2Lines(text) {
     let lines = [];
     let firstParentheses = text.indexOf('(') + 1;
@@ -12,15 +22,16 @@ export function createTable2Lines(text) {
     return lines;
 }
 
-export function BoxHeight() {
-    let height = window.innerHeight - 520;
-    if (height < 250) {
-        height = 250;
+export function boxHeight() {
+    let innerHeight = window.innerHeight;
+    if (innerHeight < SIZES.minHeight) {
+        innerHeight = SIZES.minHeight;
     }
+    let height = innerHeight - 540;
     return height;
 }
 
-export function BoxWidth() {
+export function boxWidth() {
     let width = window.innerWidth - 1000;
     if (width < 1450) {
         width = 1400;

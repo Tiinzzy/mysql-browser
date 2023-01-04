@@ -5,6 +5,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
+import { SIZES } from './functions';
+
 import { shared } from './shared';
 
 import BackEndConnection from './BackEndConnection';
@@ -57,7 +59,7 @@ export default function ConnectionInfo(props) {
 
     return (
         <>
-            <Box display='flex'>
+            <Box display='flex' style={{ width: SIZES.getRightBoxWidth() }}>
                 <Box style={boxStyle}>
                     <div>Host:</div>
                     <TextField name='host' variant="outlined" value={host} onChange={(e) => somethingChanged(e)} />

@@ -3,7 +3,9 @@ import React from "react";
 import Box from '@mui/material/Box';
 
 import { shared } from './shared';
-import { BoxHeight, BoxWidth, createTable2Lines } from './functions';
+import { boxHeight, boxWidth, createTable2Lines } from './functions';
+
+import { SIZES } from './functions';
 
 import './style.css';
 
@@ -14,8 +16,8 @@ class DisplayData extends React.Component {
 
         this.state = {
             createTable: '',
-            height: BoxHeight(),
-            width: BoxWidth()
+            height: boxHeight(),
+            width: props.width
         }
 
         this.callDisplayData = this.callDisplayData.bind(this);
@@ -28,7 +30,7 @@ class DisplayData extends React.Component {
     }
 
     handleScreenResize() {
-        this.setState({ height: BoxHeight(), width: BoxWidth() });
+        this.setState({ height: boxHeight() });
     }
 
     callDisplayData(message) {
@@ -51,7 +53,7 @@ class DisplayData extends React.Component {
 
     render() {
         return (
-            <Box style={{ height: this.state.height, overflowY: 'scroll', border: 'solid 1px #eaeaea', width: this.state.width }}>
+            <Box style={{ height: this.state.height, overflowY: 'scroll', border: 'solid 1px #eaeaea', width: SIZES.getRightBoxWidth() }}>
                 {this.state.data && this.state.data.length > 0 &&
                     <table>
                         <tbody >
