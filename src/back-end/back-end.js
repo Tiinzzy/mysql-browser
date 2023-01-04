@@ -18,6 +18,15 @@ app.get('/execute-sql', async function (req, res) {
     }
 })
 
+app.get('/get-sql-tables', async function (req, res) {
+    try {
+        let result = await connection.getSqlTables(req.query);
+        res.send(result);
+    } catch (error) {
+        res.send({ error: error.message, row: [] });
+    }
+})
+
 
 
 app.listen(8888)
