@@ -22,6 +22,17 @@ class BackEndConnectionImpl {
             })
     }
 
+    async getSqlTables (query) {
+        return axios.get('/get-sql-tables', { params: query })
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+                return false;
+            })
+    }
+
 }
 
 export default class BackEndConnection {

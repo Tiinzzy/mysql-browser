@@ -3,21 +3,11 @@ import React from "react";
 import Box from '@mui/material/Box';
 
 import { shared } from './shared';
-import './style.css';
+import { boxHeight, boxWidth, createTable2Lines } from './functions';
 
-function createTable2Lines(text) {
-    let lines = [];
-    let firstParentheses = text.indexOf('(') + 1;
-    let lastParentheses = text.lastIndexOf(')');
-    lines.push(text.substring(0, firstParentheses));
-    let fields = text.substring(firstParentheses, lastParentheses);
-    fields = fields.replaceAll(',', ',&')
-    fields.split('&').forEach(e => {
-        lines.push(e);
-    });
-    lines.push(text.substring(lastParentheses));
-    return lines;
-}
+import { SIZES } from './functions';
+
+import './style.css';
 
 class DisplayData extends React.Component {
 
@@ -25,11 +15,22 @@ class DisplayData extends React.Component {
         super(props);
 
         this.state = {
-            createTable: ''
+            createTable: '',
+            height: boxHeight(),
+            width: props.width
         }
 
         this.callDisplayData = this.callDisplayData.bind(this);
+        this.handleScreenResize = this.handleScreenResize.bind(this);
         shared.callDisplayData = this.callDisplayData;
+    }
+
+    componentDidMount() {
+        window.addEventListener("resize", this.handleScreenResize);
+    }
+
+    handleScreenResize() {
+        this.setState({ height: boxHeight() });
     }
 
     callDisplayData(message) {
@@ -52,7 +53,7 @@ class DisplayData extends React.Component {
 
     render() {
         return (
-            <Box style={{ height: 300, overflowY: 'scroll', border: 'solid 1px #eaeaea' }}>
+            <Box style={{ height: this.state.height, overflowY: 'scroll', border: 'solid 1px #eaeaea', width: SIZES.getRightBoxWidth() }}>
                 {this.state.data && this.state.data.length > 0 &&
                     <table>
                         <tbody >
@@ -74,7 +75,7 @@ class DisplayData extends React.Component {
                     </table>}
 
                 {createTable2Lines(this.state.createTable).map((l, i) => (
-                    <div key={i}>
+                    <div key={i} style={{paddingTop: 15, paddingLeft: 15}}>
                         {l}
                     </div>
                 ))}

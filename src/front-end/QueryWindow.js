@@ -6,17 +6,23 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import Dialog from "@mui/material/Dialog";
 
 import BackEndConnection from './BackEndConnection';
 import DisplayData from './DisplayData';
+import DialogContent from './DialogContent';
+
+import { SIZES } from './functions';
 
 import { shared } from './shared';
 
 const backend = BackEndConnection.INSTANCE();
 
-export default function QueryWindow() {
+export default function QueryWindow(props) {
     const [sql, setSql] = useState('select 1 from dual');
     const [errorMsg, setErrorMsg] = useState('');
+    const [openDialog, setOpenDialog] = useState(false);
+    const [checkBox, setCheckBox] = useState(false);
 
     function sqlChanged(e) {
         setSql(e.target.value);
@@ -29,21 +35,35 @@ export default function QueryWindow() {
         if (result.error) {
             console.log(result.error);
         }
+        setOpenDialog(true);
+
+        if (checkBox) {
+            setOpenDialog(false);
+        };
+    }
+
+    function handleCloseDialog(message) {
+        setOpenDialog(false);
+        if (message.status === true) {
+            setCheckBox(true);
+        }
     }
 
     return (
-        <>
+        <Box >
             <Box>
-                <TextField name='sql' variant="outlined"
-                    fullWidth
+                <TextField style={{ width: SIZES.getRightBoxWidth() }}
+                    name='sql'
+                    variant="outlined"
                     value={sql}
                     multiline
-                    rows={10}
+                    rows={8}
                     onChange={(e) => sqlChanged(e)} />
             </Box>
+
             <Box display='flex'>
-                <Button style={{ marginTop: 27.5 }} variant="outlined" onClick={() => executeSql()}>Execute</Button>
-                <Box flexGrow={1} mt={4} ml={4} color='red'>
+                <Button style={{ marginTop: 15 }} variant="outlined" onClick={() => executeSql()}>Execute</Button>
+                <Box style={{ marginLeft: 20, marginTop: 20 }} color='red'>
                     <Typography alignItems='center'> {errorMsg} </Typography>
                 </Box>
             </Box>
@@ -51,6 +71,10 @@ export default function QueryWindow() {
             <Divider sx={{ mt: 2, mb: 2 }} />
 
             <DisplayData />
-        </>
+            
+            {openDialog && <Dialog onClose={() => handleCloseDialog()} open={openDialog} maxWidth='sm' >
+                <DialogContent handleCloseDialog={handleCloseDialog} />
+            </Dialog>}
+        </Box>
     );
 }

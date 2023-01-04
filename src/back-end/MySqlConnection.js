@@ -11,7 +11,7 @@ class MySqlConnectionImpl {
         if (safeSql.trim().toLowerCase().startsWith("select")) {
             safeSql = 'select * from (\n' + safeSql + '\n) SAFE_TABLE_LOW_ROWS limit 1000';
         }
-        
+
         return this.#connection.promise()
             .query(safeSql)
             .then(([rows, fields]) => {
@@ -23,6 +23,23 @@ class MySqlConnectionImpl {
             }).finally(() => {
                 this.#connection.end();
             });
+    }
+
+    async getSqlTables(params) {
+        this.#open();
+
+        return this.#connection.promise()
+            .query(params.sqlMsg)
+            .then(([rows, fields]) => {
+                return { eror: null, rows }
+            })
+            .catch((error) => {
+                this.#connection.end();
+                return { error: error.message, rows: [] };
+            }).finally(() => {
+                this.#connection.end();
+            });
+
     }
 
     async connect(params) {
