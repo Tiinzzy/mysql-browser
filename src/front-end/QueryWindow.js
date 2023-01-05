@@ -22,6 +22,8 @@ export default function QueryWindow(props) {
     const [openDialog, setOpenDialog] = useState(false);
     const [checkBox, setCheckBox] = useState(false);
 
+    shared.callQueryWindow = callQueryWindow;
+
     function sqlChanged(e) {
         setSql(e.target.value);
     }
@@ -47,6 +49,12 @@ export default function QueryWindow(props) {
         }
     }
 
+    function callQueryWindow(message) {
+        if (message.action === 'change-command') {
+            setSql(message.command)
+        }
+    }
+
     return (
         <Box >
             <Box>
@@ -69,7 +77,7 @@ export default function QueryWindow(props) {
             <Divider sx={{ mt: 2, mb: 2 }} />
 
             <DisplayData />
-            
+
             {openDialog && <Dialog onClose={() => handleCloseDialog()} open={openDialog} maxWidth='sm' >
                 <DialogContent handleCloseDialog={handleCloseDialog} />
             </Dialog>}
