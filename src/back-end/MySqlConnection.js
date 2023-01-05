@@ -58,6 +58,21 @@ class MySqlConnectionImpl {
 
     }
 
+    async getSqlViews(params) {
+        this.#open();
+        return this.#connection.promise()
+            .query(params.sqlViews)
+            .then(([rows, fields]) => {
+                return { eror: null, rows }
+            })
+            .catch((error) => {
+                this.#connection.end();
+                return { error: error.message, rows: [] };
+            }).finally(() => {
+                this.#connection.end();
+            });
+
+    }
 
     async connect(params) {
         this.#connectionInfo.host = params.host;
