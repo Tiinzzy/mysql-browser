@@ -33,6 +33,7 @@ class DisplayData extends React.Component {
     }
 
     callDisplayData(message) {
+        console.log(message)
         if (message.action === 'data-ready-for-display') {
             this.setState({ data: message.data, createTable: '' });
             let size = message.data.length;
@@ -46,6 +47,12 @@ class DisplayData extends React.Component {
                         this.setState({ data: null });
                     });
                 }
+            }
+        } else if (message.action === 'table-clicked-data') {
+            this.setState({ data: message.data });
+            let size = message.data.length;
+            if (size === 0) {
+                this.setState({ data: [], createTable: '' });
             }
         }
     }
