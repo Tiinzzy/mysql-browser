@@ -8,7 +8,11 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
+import BackEndConnection from './BackEndConnection';
+
 import { shared } from './functions';
+
+const backend = BackEndConnection.INSTANCE();
 
 class GetSqlTables extends React.Component {
 
@@ -18,6 +22,8 @@ class GetSqlTables extends React.Component {
             opne: true
         }
         this.callGetSqlTables = this.callGetSqlTables.bind(this);
+        this.handleOpenList = this.handleOpenList.bind(this);
+        this.sendSqlCommand = this.sendSqlCommand.bind(this);
         shared.callGetSqlTables = this.callGetSqlTables;
     }
 
@@ -27,8 +33,19 @@ class GetSqlTables extends React.Component {
         }
     }
 
-    handleClick() {
+    handleOpenList() {
         this.setState({ open: (!this.state.open) })
+    }
+
+    async sendSqlCommand(data) {
+        let sql = 'SELECT * FROM ' + data;
+        let result = await backend.selectAllSql({ sql });
+        console.log(result);
+        if (result.error) {
+            console.log(result.error);
+        }
+        shared.callDisplayData({ action: 'table-clicked-data', data: result.rows });
+        shared.callQueryWindow({ action: 'change-command', command: sql });
     }
 
     render() {
@@ -37,7 +54,7 @@ class GetSqlTables extends React.Component {
                 <List
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                     component="nav">
-                    <ListItemButton onClick={() => this.handleClick()}>
+                    <ListItemButton onClick={() => this.handleOpenList()}>
                         <ListItemText primary="Availabe Tables" />
                         {this.state.open ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
@@ -46,7 +63,7 @@ class GetSqlTables extends React.Component {
                             <List component="div" disablePadding key={i}>
                                 {Object.values(e).map((val, j) => (
                                     <ListItemButton sx={{ pl: 4 }} key={j}>
-                                        <ListItemText primary={val} />
+                                        <ListItemText primary={val} onClick={() => this.sendSqlCommand(val)} />
                                     </ListItemButton>
                                 ))}
                             </List>
