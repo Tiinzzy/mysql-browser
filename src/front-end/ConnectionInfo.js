@@ -5,9 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
-import { SIZES } from './functions';
-
-import { shared } from './shared';
+import { SIZES, shared } from './functions';
 
 import BackEndConnection from './BackEndConnection';
 const backend = BackEndConnection.INSTANCE();

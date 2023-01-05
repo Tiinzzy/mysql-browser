@@ -12,9 +12,7 @@ import BackEndConnection from './BackEndConnection';
 import DisplayData from './DisplayData';
 import DialogContent from './DialogContent';
 
-import { SIZES } from './functions';
-
-import { shared } from './shared';
+import { SIZES, shared } from './functions';
 
 const backend = BackEndConnection.INSTANCE();
 

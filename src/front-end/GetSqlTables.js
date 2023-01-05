@@ -8,7 +8,7 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 
-import { shared } from './shared';
+import { shared } from './functions';
 
 class GetSqlTables extends React.Component {
 
