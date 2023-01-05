@@ -37,5 +37,4 @@ app.get('/select-all-from-sql-table', async function (req, res) {
 })
 
 
-
 app.listen(8888)

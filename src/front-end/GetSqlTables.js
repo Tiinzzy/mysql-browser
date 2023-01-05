@@ -40,7 +40,6 @@ class GetSqlTables extends React.Component {
     async sendSqlCommand(data) {
         let sql = 'SELECT * FROM ' + data;
         let result = await backend.selectAllSql({ sql });
-        console.log(result);
         if (result.error) {
             console.log(result.error);
         }
@@ -55,7 +54,7 @@ class GetSqlTables extends React.Component {
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                     component="nav">
                     <ListItemButton onClick={() => this.handleOpenList()}>
-                        <ListItemText primary="Availabe Tables" />
+                        <ListItemText primary="Tables" />
                         {this.state.open ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
                     <Collapse in={this.state.open} timeout="auto" unmountOnExit>

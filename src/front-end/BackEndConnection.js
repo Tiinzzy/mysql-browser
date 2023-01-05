@@ -22,7 +22,7 @@ class BackEndConnectionImpl {
             })
     }
 
-    async getSqlTables (query) {
+    async getSqlTables(query) {
         return axios.get('/get-sql-tables', { params: query })
             .then(function (response) {
                 return response.data;
@@ -33,7 +33,7 @@ class BackEndConnectionImpl {
             })
     }
 
-    async selectAllSql (query) {
+    async selectAllSql(query) {
         return axios.get('/select-all-from-sql-table', { params: query })
             .then(function (response) {
                 return response.data;
@@ -43,6 +43,7 @@ class BackEndConnectionImpl {
                 return false;
             })
     }
+
 
 }
 

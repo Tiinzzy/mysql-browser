@@ -27,7 +27,6 @@ class MySqlConnectionImpl {
 
     async getSqlTables(params) {
         this.#open();
-
         return this.#connection.promise()
             .query(params.sqlMsg)
             .then(([rows, fields]) => {
@@ -58,7 +57,6 @@ class MySqlConnectionImpl {
             });
 
     }
-
 
 
     async connect(params) {
