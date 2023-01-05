@@ -44,6 +44,17 @@ class BackEndConnectionImpl {
             })
     }
 
+    async getSqlViews(query) {
+        return axios.get('/get-sql-views', { params: query })
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+                return false;
+            })
+    }
+
 
 }
 
