@@ -19,10 +19,12 @@ class GetSqlTables extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            opne: true
+            openT: false,
+            openV: false
         }
         this.callGetSqlTables = this.callGetSqlTables.bind(this);
-        this.handleOpenList = this.handleOpenList.bind(this);
+        this.handleOpenTList = this.handleOpenTList.bind(this);
+        this.handleOpenVList = this.handleOpenVList.bind(this);
         this.sendSqlCommand = this.sendSqlCommand.bind(this);
         shared.callGetSqlTables = this.callGetSqlTables;
     }
@@ -30,11 +32,17 @@ class GetSqlTables extends React.Component {
     callGetSqlTables(message) {
         if (message.action === 'available-tables') {
             this.setState({ tables: message.data });
+        } else if (message.action === 'available-data-in-views') {
+            this.setState({ views: message.data });
         }
     }
 
-    handleOpenList() {
-        this.setState({ open: (!this.state.open) })
+    handleOpenTList() {
+        this.setState({ openT: (!this.state.openT) })
+    }
+
+    handleOpenVList() {
+        this.setState({ openV: (!this.state.openV) })
     }
 
     async sendSqlCommand(data) {
@@ -53,16 +61,36 @@ class GetSqlTables extends React.Component {
                 <List
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                     component="nav">
-                    <ListItemButton onClick={() => this.handleOpenList()}>
+                    <ListItemButton onClick={() => this.handleOpenTList()}>
                         <ListItemText primary="Tables" />
-                        {this.state.open ? <ExpandLess /> : <ExpandMore />}
+                        {this.state.openT ? <ExpandLess /> : <ExpandMore /> }
                     </ListItemButton>
-                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                    <Collapse in={this.state.openT} timeout="auto" unmountOnExit>
                         {this.state.tables && this.state.tables.map((e, i) =>
                             <List component="div" disablePadding key={i}>
                                 {Object.values(e).map((val, j) => (
                                     <ListItemButton sx={{ pl: 4 }} key={j}>
                                         <ListItemText primary={val} onClick={() => this.sendSqlCommand(val)} />
+                                    </ListItemButton>
+                                ))}
+                            </List>
+                        )}
+                    </Collapse>
+                </List>
+
+                <List
+                    sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                    component="nav">
+                    <ListItemButton onClick={() => this.handleOpenVList()}>
+                        <ListItemText primary="Views" />
+                        {this.state.openV ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={this.state.openV} timeout="auto" unmountOnExit>
+                        {this.state.views && this.state.views.map((e, i) =>
+                            <List component="div" disablePadding key={i}>
+                                {Object.values(e).map((val, j) => (
+                                    <ListItemButton sx={{ pl: 4 }} key={j}>
+                                        <ListItemText primary={val} />
                                     </ListItemButton>
                                 ))}
                             </List>
