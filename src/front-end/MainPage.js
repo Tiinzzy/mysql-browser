@@ -17,8 +17,7 @@ const leftBoxStyle = {
     flexDirection: 'column',
     marginTop: 28,
     width: SIZES.leftBoxWidth,
-    maxHeight: 865,
-    overflowY: 'scroll'
+    maxHeight: 865
 }
 
 const rightBoxStyle = function (width) {

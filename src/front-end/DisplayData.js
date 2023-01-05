@@ -3,7 +3,7 @@ import React from "react";
 import Box from '@mui/material/Box';
 
 import { shared } from './shared';
-import { boxHeight, boxWidth, createTable2Lines } from './functions';
+import { boxHeight, createTable2Lines } from './functions';
 
 import { SIZES } from './functions';
 
