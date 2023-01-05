@@ -32,7 +32,7 @@ class GetSqlTables extends React.Component {
     callGetSqlTables(message) {
         if (message.action === 'available-tables') {
             this.setState({ tables: message.data });
-        } else if (message.action === 'available-data-in-views') {
+        } else if (message.action === 'available-data-in-views' && message.currDatabase === 'sys' ) {
             this.setState({ views: message.data });
         }
     }
