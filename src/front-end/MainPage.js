@@ -8,7 +8,7 @@ import ConnectionInfo from './ConnectionInfo';
 import QueryWindow from './QueryWindow';
 import GetSqlTables from './GetSqlTables';
 
-import { SIZES } from './functions';
+import { SIZES, rightBoxStyle } from './functions';
 
 const leftBoxStyle = {
     overflowY: 'scroll',
@@ -20,25 +20,11 @@ const leftBoxStyle = {
     maxHeight: 865
 }
 
-const rightBoxStyle = function (width) {
-    return {
-        border: 'solid 0px blue',
-        display: 'flex',
-        flexDirection: 'row',
-        marginTop: 10,
-        marginLeft: 10,
-        marginRight: 10,
-        width: width
-    }
-}
-
 export default function MainPage() {
     const [queryOk, setQueryOk] = useState(false);
     const [width, setWidth] = useState(window.innerWidth - 20);
 
-
     window.addEventListener("resize", handleScreenResize);
-
 
     function callSetQueryOk(isOk) {
         setQueryOk(isOk);
