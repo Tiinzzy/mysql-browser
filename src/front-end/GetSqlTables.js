@@ -1,6 +1,12 @@
 import React from "react";
 
 import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 import { shared } from './shared';
 
@@ -9,6 +15,7 @@ class GetSqlTables extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            opne: true
         }
         this.callGetSqlTables = this.callGetSqlTables.bind(this);
         shared.callGetSqlTables = this.callGetSqlTables;
@@ -20,20 +27,32 @@ class GetSqlTables extends React.Component {
         }
     }
 
+    handleClick() {
+        this.setState({ open: (!this.state.open) })
+    }
+
     render() {
         return (
             <Box style={{ border: 'solid 0px green' }}>
-                <Box style={{ paddingTop: 15, paddingLeft: 20, paddingRight: 30 }}>
-                    Availabe Tables
-                </Box>
-                {this.state.tables && this.state.tables.map((e, i) =>
-                    < ul key={i} >
-                        {Object.values(e).map((val, j) => (
-                            <li onClick={() => {alert(val)}} key={j} style={{ cursor:'pointer', spacing: 'compact' }} >{val}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                <List
+                    sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                    component="nav">
+                    <ListItemButton onClick={() => this.handleClick()}>
+                        <ListItemText primary="Availabe Tables" />
+                        {this.state.open ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                        {this.state.tables && this.state.tables.map((e, i) =>
+                            <List component="div" disablePadding key={i}>
+                                {Object.values(e).map((val, j) => (
+                                    <ListItemButton sx={{ pl: 4 }} key={j}>
+                                        <ListItemText primary={val} />
+                                    </ListItemButton>
+                                ))}
+                            </List>
+                        )}
+                    </Collapse>
+                </List>
             </Box>
         );
     }
