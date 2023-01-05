@@ -36,5 +36,13 @@ app.get('/select-all-from-sql-table', async function (req, res) {
     }
 })
 
+app.get('/get-sql-views', async function (req, res) {
+    try {
+        let result = await connection.getSqlViews(req.query);
+        res.send(result);
+    } catch (error) {
+        res.send({ error: error.message, row: [] });
+    }
+})
 
 app.listen(8888)
