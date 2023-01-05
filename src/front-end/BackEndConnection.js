@@ -33,6 +33,17 @@ class BackEndConnectionImpl {
             })
     }
 
+    async selectAllSql (query) {
+        return axios.get('/select-all-from-sql-table', { params: query })
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+                return false;
+            })
+    }
+
 }
 
 export default class BackEndConnection {
