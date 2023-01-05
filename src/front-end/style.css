@@ -39,7 +39,6 @@ td {
 }
 
 .displayBox {
-    overflow-y: 'scroll';
     border: 'solid 1px #eaeaea';
     border-radius: 2px;
 }

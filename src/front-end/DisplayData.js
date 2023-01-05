@@ -58,7 +58,7 @@ class DisplayData extends React.Component {
 
     render() {
         return (
-            <Box className='displayBox' style={{ height: this.state.height, width: SIZES.getRightBoxWidth() }}>
+            <Box className='displayBox' style={{ height: this.state.height, width: SIZES.getRightBoxWidth(), overflowY: 'scroll'}}>
                 {this.state.data && this.state.data.length > 0 &&
                     <table>
                         <tbody >
