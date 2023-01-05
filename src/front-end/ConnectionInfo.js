@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
-import { SIZES,shared } from './functions';
+import { SIZES, shared } from './functions';
 
 import BackEndConnection from './BackEndConnection';
 const backend = BackEndConnection.INSTANCE();
@@ -24,6 +24,7 @@ export default function ConnectionInfo(props) {
     const [user, setUser] = useState('root');
     const [password, setPassword] = useState('washywashy');
     const [sqlMsg, setSqlMsg] = useState('show tables');
+    const [sqlViews, setSqlViews] = useState('select TABLE_NAME from information_schema.tables WHERE TABLE_TYPE LIKE "VIEW"');
 
     function somethingChanged(e) {
         let key = e.code || "";
@@ -53,6 +54,12 @@ export default function ConnectionInfo(props) {
             console.log(result.error);
         }
         shared.callGetSqlTables({ action: 'available-tables', data: result.rows });
+
+        let views = await backend.getSqlViews({ sqlViews });
+        if (views.error) {
+            console.log(views.error);
+        }
+        shared.callGetSqlTables({ action: 'available-data-in-views', data: views.rows });
     }
 
     return (
