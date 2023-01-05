@@ -52,7 +52,7 @@ class DisplayData extends React.Component {
 
     render() {
         return (
-            <Box style={{ height: this.state.height, overflowY: 'scroll', border: 'solid 1px #eaeaea', width: SIZES.getRightBoxWidth() }}>
+            <Box className='displayBox' style={{ height: this.state.height, width: SIZES.getRightBoxWidth() }}>
                 {this.state.data && this.state.data.length > 0 &&
                     <table>
                         <tbody >
@@ -63,7 +63,7 @@ class DisplayData extends React.Component {
                                 ))}
                             </tr>
                             {this.state.data.map((e, i) => (
-                                <tr key={i} id='data'>
+                                <tr key={i}>
                                     <td>{1 + i}</td>
                                     {Object.values(e).map((val, j) => (
                                         <td key={j}>{val}</td>
@@ -74,7 +74,7 @@ class DisplayData extends React.Component {
                     </table>}
 
                 {createTable2Lines(this.state.createTable).map((l, i) => (
-                    <div key={i} style={{paddingTop: 15, paddingLeft: 15}}>
+                    <div key={i} className="createTableDiv">
                         {l}
                     </div>
                 ))}
