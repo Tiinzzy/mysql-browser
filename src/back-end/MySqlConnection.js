@@ -42,6 +42,25 @@ class MySqlConnectionImpl {
 
     }
 
+    async selectAllSql(params) {
+        this.#open();
+
+        return this.#connection.promise()
+            .query(params.sql)
+            .then(([rows, fields]) => {
+                return { eror: null, rows }
+            })
+            .catch((error) => {
+                this.#connection.end();
+                return { error: error.message, rows: [] };
+            }).finally(() => {
+                this.#connection.end();
+            });
+
+    }
+
+
+
     async connect(params) {
         this.#connectionInfo.host = params.host;
         this.#connectionInfo.user = params.user;
