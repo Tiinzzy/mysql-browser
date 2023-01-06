@@ -134,7 +134,7 @@ function ignoreForbiddenCommands(sql) {
     cleanSql = cleanSql.split(' ');
     if (cleanSql.length >= 1) {
         cleanSql = cleanSql[0];
-        let allowed = ['select', 'show', 'display'];
+        let allowed = ['select', 'show', 'display','create','insert','update'];
         if (allowed.indexOf(cleanSql) >= 0) {
             return sql;
         } else {
