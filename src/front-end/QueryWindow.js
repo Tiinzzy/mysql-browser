@@ -51,7 +51,8 @@ export default function QueryWindow(props) {
 
     function callQueryWindow(message) {
         if (message.action === 'change-command') {
-            setSql(message.command)
+            setSql(message.command);
+            setErrorMsg('');
         }
     }
 
