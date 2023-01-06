@@ -26,13 +26,17 @@ class GetSqlTables extends React.Component {
         this.handleOpenTList = this.handleOpenTList.bind(this);
         this.handleOpenVList = this.handleOpenVList.bind(this);
         this.sendSqlCommand = this.sendSqlCommand.bind(this);
+    }
+
+    componentDidMount() {
         shared.callGetSqlTables = this.callGetSqlTables;
     }
 
     callGetSqlTables(message) {
         if (message.action === 'available-tables') {
             this.setState({ tables: message.data });
-        } else if (message.action === 'available-data-in-views' && message.currDatabase === 'sys' ) {
+        } else if (message.action === 'available-data-in-views') {
+            console.log(message.currDatabase);
             this.setState({ views: message.data });
         }
     }
@@ -45,14 +49,10 @@ class GetSqlTables extends React.Component {
         this.setState({ openV: (!this.state.openV) })
     }
 
-    async sendSqlCommand(data) {
+    sendSqlCommand(data) {       
         let sql = 'SELECT * FROM ' + data;
-        let result = await backend.selectAllSql({ sql });
-        if (result.error) {
-            console.log(result.error);
-        }
-        shared.callDisplayData({ action: 'table-clicked-data', data: result.rows });
         shared.callQueryWindow({ action: 'change-command', command: sql });
+        shared.callDisplayData({ action: 'table-clicked-sql', sql: sql });
     }
 
     render() {
@@ -69,8 +69,8 @@ class GetSqlTables extends React.Component {
                         {this.state.tables && this.state.tables.map((e, i) =>
                             <List component="div" disablePadding key={i}>
                                 {Object.values(e).map((val, j) => (
-                                    <ListItemButton sx={{ pl: 4 }} key={j}>
-                                        <ListItemText primary={val} onClick={() => this.sendSqlCommand(val)} />
+                                    <ListItemButton sx={{ pl: 4 }} key={j} onClick={() => {console.log(Math.random()); this.sendSqlCommand(val);} }>
+                                        <ListItemText primary={val}  />
                                     </ListItemButton>
                                 ))}
                             </List>
