@@ -5,7 +5,7 @@ const MySqlConnection = require('./MySqlConnection');
 const connection = MySqlConnection.INSTANCE();
 
 app.get('/connection-is-ok', async function (req, res) {
-    let isOK = await connection.connect(req.query)
+    let isOK = await connection.connect(req.query);
     res.send({ isOK })
 })
 

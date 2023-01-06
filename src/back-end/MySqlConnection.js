@@ -10,37 +10,16 @@ class MySqlConnectionImpl {
         let safeSql = params.sql;
         if (safeSql.trim().toLowerCase().startsWith("select")) {
             safeSql = 'select * from (\n' + safeSql + '\n) SAFE_TABLE_LOW_ROWS limit 1000';
-            console.log(safeSql);
         }
 
-        return this.#connection.promise()
-            .query(ignoreForbiddenCommands(safeSql))
-            .then(([rows, fields]) => {
-                return { eror: null, rows }
-            })
-            .catch((error) => {
-                this.#connection.end();
-                return { error: error.message, rows: [] };
-            }).finally(() => {
-                this.#connection.end();
-            });
+        return this.#execute(safeSql);
     }
 
     async getSqlTables(params) {
         this.#open();
 
-        let sql = "select table_name from information_schema.tables where table_schema = '" + params.database + "' and table_type = 'BASE TABLE'";
-        return this.#connection.promise()
-            .query(ignoreForbiddenCommands(sql))
-            .then(([rows, fields]) => {
-                return { eror: null, rows }
-            })
-            .catch((error) => {
-                this.#connection.end();
-                return { error: error.message, rows: [] };
-            }).finally(() => {
-                this.#connection.end();
-            });
+        let sql = "select table_name from information_schema.tables where table_schema = '" + params.selected + "' and table_type = 'BASE TABLE'";
+        return this.#execute(sql);
     }
 
     async selectAllSql(params) {
@@ -51,24 +30,36 @@ class MySqlConnectionImpl {
             safeSql = 'select * from (\n' + safeSql + '\n) SAFE_TABLE_LOW_ROWS limit 1000';
         }
 
-        return this.#connection.promise()
-            .query(ignoreForbiddenCommands(safeSql))
-            .then(([rows, fields]) => {
-                return { eror: null, rows }
-            })
-            .catch((error) => {
-                this.#connection.end();
-                return { error: error.message, rows: [] };
-            }).finally(() => {
-                this.#connection.end();
-            });
-
+        return this.#execute(safeSql);
     }
 
     async getSqlViews(params) {
         this.#open();
+        let sql = "select table_name from information_schema.tables where table_schema = '" + params.selected + "' and table_type = 'VIEW'";
+        return this.#execute(sql);
+    }
 
-        let sql = "select table_name from information_schema.tables where table_schema = '" + params.database + "' and table_type = 'VIEW'";
+    async connect(params) {
+        this.#connectionInfo.host = params.host;
+        this.#connectionInfo.user = params.user;
+        this.#connectionInfo.password = params.password;
+        this.#connectionInfo.selected = params.selected;
+
+        this.#open();
+
+        return this.#connection.promise()
+            .query('select 1 as result from dual;')
+            .then(([rows, fields]) => {
+                return rows[0].result === 1;
+            })
+            .catch((error) => {
+                return false;
+            }).finally(() => {
+                this.#connection.end();
+            });
+    }
+
+    async #execute(sql) {
         return this.#connection.promise()
             .query(ignoreForbiddenCommands(sql))
             .then(([rows, fields]) => {
@@ -80,28 +71,6 @@ class MySqlConnectionImpl {
             }).finally(() => {
                 this.#connection.end();
             });
-
-    }
-
-    async connect(params) {
-        this.#connectionInfo.host = params.host;
-        this.#connectionInfo.user = params.user;
-        this.#connectionInfo.password = params.password;
-        this.#connectionInfo.database = params.database;
-
-        this.#open();
-
-        return this.#connection.promise()
-            .query('select 1 as result from dual;')
-            .then(([rows, fields]) => {
-                return rows[0].result === 1;
-            })
-            .catch((error) => {
-                console.log(error);
-                return false;
-            }).finally(() => {
-                this.#connection.end();
-            });
     }
 
     #open() {
@@ -109,7 +78,7 @@ class MySqlConnectionImpl {
             host: this.#connectionInfo.host,
             user: this.#connectionInfo.user,
             password: this.#connectionInfo.password,
-            database: this.#connectionInfo.database
+            database: this.#connectionInfo.selected
         });
     }
 
@@ -134,7 +103,7 @@ function ignoreForbiddenCommands(sql) {
     cleanSql = cleanSql.split(' ');
     if (cleanSql.length >= 1) {
         cleanSql = cleanSql[0];
-        let allowed = ['select', 'show', 'display'];
+        let allowed = ['select', 'show', 'display', 'create', 'insert', 'update'];
         if (allowed.indexOf(cleanSql) >= 0) {
             return sql;
         } else {
