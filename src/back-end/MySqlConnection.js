@@ -10,10 +10,11 @@ class MySqlConnectionImpl {
         let safeSql = params.sql;
         if (safeSql.trim().toLowerCase().startsWith("select")) {
             safeSql = 'select * from (\n' + safeSql + '\n) SAFE_TABLE_LOW_ROWS limit 1000';
+            console.log(safeSql);
         }
 
         return this.#connection.promise()
-            .query(safeSql)
+            .query(ignoreForbiddenCommands(safeSql))
             .then(([rows, fields]) => {
                 return { eror: null, rows }
             })
@@ -28,8 +29,48 @@ class MySqlConnectionImpl {
     async getSqlTables(params) {
         this.#open();
 
+        let sql = "select table_name from information_schema.tables where table_schema = '" + params.database + "' and table_type = 'BASE TABLE'";
         return this.#connection.promise()
-            .query(params.sqlMsg)
+            .query(ignoreForbiddenCommands(sql))
+            .then(([rows, fields]) => {
+                return { eror: null, rows }
+            })
+            .catch((error) => {
+                this.#connection.end();
+                return { error: error.message, rows: [] };
+            }).finally(() => {
+                this.#connection.end();
+            });
+    }
+
+    async selectAllSql(params) {
+        this.#open();
+
+        let safeSql = params.sql;
+        if (safeSql.trim().toLowerCase().startsWith("select")) {
+            safeSql = 'select * from (\n' + safeSql + '\n) SAFE_TABLE_LOW_ROWS limit 1000';
+        }
+
+        return this.#connection.promise()
+            .query(ignoreForbiddenCommands(safeSql))
+            .then(([rows, fields]) => {
+                return { eror: null, rows }
+            })
+            .catch((error) => {
+                this.#connection.end();
+                return { error: error.message, rows: [] };
+            }).finally(() => {
+                this.#connection.end();
+            });
+
+    }
+
+    async getSqlViews(params) {
+        this.#open();
+
+        let sql = "select table_name from information_schema.tables where table_schema = '" + params.database + "' and table_type = 'VIEW'";
+        return this.#connection.promise()
+            .query(ignoreForbiddenCommands(sql))
             .then(([rows, fields]) => {
                 return { eror: null, rows }
             })
@@ -85,5 +126,21 @@ module.exports = class MySqlConnection {
             MySqlConnection.#database = new MySqlConnectionImpl();
         }
         return MySqlConnection.#database;
+    }
+}
+
+function ignoreForbiddenCommands(sql) {
+    let cleanSql = sql.toLowerCase().trim();
+    cleanSql = cleanSql.split(' ');
+    if (cleanSql.length >= 1) {
+        cleanSql = cleanSql[0];
+        let allowed = ['select', 'show', 'display'];
+        if (allowed.indexOf(cleanSql) >= 0) {
+            return sql;
+        } else {
+            return "select 'Sorry just queries starting with " + allowed.join(', ') + "!' as message from dual";
+        }
+    } else {
+        return sql;
     }
 }

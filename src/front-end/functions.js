@@ -38,3 +38,19 @@ export function boxWidth() {
     }
     return width;
 }
+
+export const shared = {
+    
+}
+
+export const rightBoxStyle = function (width) {
+    return {
+        border: 'solid 0px blue',
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
+        width: width
+    }
+}

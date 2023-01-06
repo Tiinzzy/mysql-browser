@@ -22,7 +22,7 @@ class BackEndConnectionImpl {
             })
     }
 
-    async getSqlTables (query) {
+    async getSqlTables(query) {
         return axios.get('/get-sql-tables', { params: query })
             .then(function (response) {
                 return response.data;
@@ -32,6 +32,33 @@ class BackEndConnectionImpl {
                 return false;
             })
     }
+
+    
+    async selectAllSql(query, callback) {
+        return axios.get('/select-all-from-sql-table', { params: query })
+            .then(function (response) {
+                if (callback) {
+                    callback(response.data);
+                }
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+                return false;
+            })
+    }
+
+    async getSqlViews(query) {
+        return axios.get('/get-sql-views', { params: query })
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+                return false;
+            })
+    }
+
 
 }
 
