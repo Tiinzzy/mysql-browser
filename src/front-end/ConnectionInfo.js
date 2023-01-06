@@ -25,6 +25,8 @@ export default function ConnectionInfo(props) {
     const [user, setUser] = useState('root');
     const [password, setPassword] = useState('washywashy');
 
+    shared.callConnectionInfo = callConnectionInfo;
+
     function somethingChanged(e) {
         let key = e.code || "";
         let isEnter = key.toLowerCase().indexOf('enter') >= 0;
@@ -67,6 +69,12 @@ export default function ConnectionInfo(props) {
             data: views.rows,
             currDatabase: database
         });
+    }
+
+    function callConnectionInfo(message) {
+        if (message.action === 'refresh-the-page') {
+            connectToMysql();
+        }
     }
 
     return (
