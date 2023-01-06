@@ -57,7 +57,7 @@ export default function QueryWindow(props) {
     }
 
     return (
-        <Box >
+        <Box>
             <Box>
                 <TextField style={{ width: SIZES.getRightBoxWidth() }}
                     name='sql'
