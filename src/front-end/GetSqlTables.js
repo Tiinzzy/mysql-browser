@@ -10,12 +10,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-import BackEndConnection from './BackEndConnection';
-
 import { shared } from './functions';
-import { Button } from "@mui/material";
-
-const backend = BackEndConnection.INSTANCE();
 
 class GetSqlTables extends React.Component {
 
@@ -58,7 +53,7 @@ class GetSqlTables extends React.Component {
         shared.callDisplayData({ action: 'table-clicked-sql', sql: sql });
     }
 
-    async refreshData() {
+    refreshData() {
         shared.callConnectionInfo({ action: 'refresh-the-page' })
     }
 
