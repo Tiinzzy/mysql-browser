@@ -37,8 +37,7 @@ class DisplayData extends React.Component {
     callDisplayData(message) {
         if (message.action === 'data-ready-for-display') {
             this.setState({ data: message.data, createTable: '' });
-            let size = message.data.length;
-            if (size === 0) {
+            if (!message.data || message.data.length === 0) {
                 this.setState({ data: [], createTable: '' });
             } else {
                 let isCreateTable = message.data[0].hasOwnProperty('Create Table');
