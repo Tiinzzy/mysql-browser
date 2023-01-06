@@ -4,12 +4,16 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 import { SIZES, shared } from './functions';
 
 import BackEndConnection from './BackEndConnection';
-const backend = BackEndConnection.INSTANCE();
 
+const backend = BackEndConnection.INSTANCE();
 const STATUS_CONNECTED = 'Connected to ';
 const STATUS_NOT_CONNECTED = 'Not Connected';
 
@@ -84,10 +88,27 @@ export default function ConnectionInfo(props) {
                     <div>Host:</div>
                     <TextField name='host' variant="outlined" value={host} onChange={(e) => somethingChanged(e)} />
                 </Box>
+
                 <Box style={boxStyle}>
                     <div>Database:</div>
-                    <TextField name='database' variant="outlined" value={database} onChange={(e) => somethingChanged(e)} />
+                    <FormControl>
+                        <Select
+                            displayEmpty
+                            inputProps={{ 'aria-label': 'Without label' }}
+                            name='database'
+                            value={database}
+                            onChange={(e) => somethingChanged(e)}>
+                            <MenuItem value={'tests'}>tests</MenuItem>
+                            <MenuItem value={'sys'}>sys</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Box>
+
+                {/* <Box style={boxStyle}>
+                    <div>Database:</div>
+                    <TextField name='database' variant="outlined" value={database} onChange={(e) => somethingChanged(e)} />
+                </Box> */}
+
                 <Box style={boxStyle}>
                     <div>User:</div>
                     <TextField name='user' variant="outlined" value={user} onChange={(e) => somethingChanged(e)} />
