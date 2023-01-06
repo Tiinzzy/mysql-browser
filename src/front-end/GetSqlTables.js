@@ -97,7 +97,7 @@ class GetSqlTables extends React.Component {
                         {this.state.views && this.state.views.map((e, i) =>
                             <List component="div" disablePadding key={i}>
                                 {Object.values(e).map((val, j) => (
-                                    <ListItemButton sx={{ pl: 4 }} key={j}>
+                                    <ListItemButton sx={{ pl: 4 }} key={j} onClick={() => this.sendSqlCommand(val)}>
                                         <ListItemText primary={val} />
                                     </ListItemButton>
                                 ))}
