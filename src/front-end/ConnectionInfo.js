@@ -50,7 +50,6 @@ export default function ConnectionInfo(props) {
         props.callSetQueryOk(connectionStatus);
 
         let result = await backend.getSqlTables({ database });
-        console.log(result.rows);
         if (result.error) {
             console.log(result.error);
         }
