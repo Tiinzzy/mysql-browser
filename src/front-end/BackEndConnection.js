@@ -33,9 +33,13 @@ class BackEndConnectionImpl {
             })
     }
 
-    async selectAllSql(query) {
+    
+    async selectAllSql(query, callback) {
         return axios.get('/select-all-from-sql-table', { params: query })
             .then(function (response) {
+                if (callback) {
+                    callback(response.data);
+                }
                 return response.data;
             })
             .catch(function (error) {
