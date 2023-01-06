@@ -2,11 +2,13 @@ import React from "react";
 
 import Box from '@mui/material/Box';
 
-import { boxHeight, createTable2Lines } from './functions';
+import BackEndConnection from './BackEndConnection';
 
-import { SIZES, shared } from './functions';
+import { boxHeight, createTable2Lines, SIZES, shared } from './functions';
 
 import './style.css';
+
+const backend = BackEndConnection.INSTANCE();
 
 class DisplayData extends React.Component {
 
@@ -21,11 +23,11 @@ class DisplayData extends React.Component {
 
         this.callDisplayData = this.callDisplayData.bind(this);
         this.handleScreenResize = this.handleScreenResize.bind(this);
-        shared.callDisplayData = this.callDisplayData;
     }
 
     componentDidMount() {
         window.addEventListener("resize", this.handleScreenResize);
+        shared.callDisplayData = this.callDisplayData;
     }
 
     handleScreenResize() {
@@ -33,6 +35,7 @@ class DisplayData extends React.Component {
     }
 
     callDisplayData(message) {
+        console.log(1, new Date());
         if (message.action === 'data-ready-for-display') {
             this.setState({ data: message.data, createTable: '' });
             let size = message.data.length;
@@ -48,17 +51,24 @@ class DisplayData extends React.Component {
                 }
             }
         } else if (message.action === 'table-clicked-data') {
-            this.setState({ data: message.data });
             let size = message.data.length;
             if (size === 0) {
                 this.setState({ data: [], createTable: '' });
+            } else {
+                this.setState({ data: message.data });
             }
+        } else if (message.action === 'table-clicked-sql') {
+            backend.selectAllSql({ sql: message.sql }, (data) => {
+                this.setState({ data: [] }, function () {
+                    this.setState({ data: data.rows });
+                });
+            });
         }
     }
 
     render() {
         return (
-            <Box className='displayBox' style={{ height: this.state.height, width: SIZES.getRightBoxWidth(), overflowY: 'scroll'}}>
+            <Box className='displayBox' style={{ height: this.state.height, width: SIZES.getRightBoxWidth(), overflowY: 'scroll' }}>
                 {this.state.data && this.state.data.length > 0 &&
                     <table>
                         <tbody >
