@@ -17,14 +17,13 @@ const boxStyle = {
     marginRight: 10
 }
 
+
 export default function ConnectionInfo(props) {
     const [status, setStatus] = useState('Not Connected');
     const [host, setHost] = useState('localhost');
     const [database, setDatabase] = useState('tests');
     const [user, setUser] = useState('root');
     const [password, setPassword] = useState('washywashy');
-    const [sqlMsg, setSqlMsg] = useState('show tables');
-    const [sqlViews, setSqlViews] = useState('select TABLE_NAME from information_schema.tables WHERE TABLE_TYPE LIKE "VIEW"');
 
     function somethingChanged(e) {
         let key = e.code || "";
@@ -50,17 +49,25 @@ export default function ConnectionInfo(props) {
         setStatus(connectionStatus ? STATUS_CONNECTED + database + ' Database' : STATUS_NOT_CONNECTED);
         props.callSetQueryOk(connectionStatus);
 
-        let result = await backend.getSqlTables({ sqlMsg });
+        let result = await backend.getSqlTables({ database });
+        console.log(result.rows);
         if (result.error) {
             console.log(result.error);
         }
-        shared.callGetSqlTables({ action: 'available-tables', data: result.rows });
+        shared.callGetSqlTables({
+            action: 'available-tables',
+            data: result.rows
+        });
 
-        let views = await backend.getSqlViews({ sqlViews });
+        let views = await backend.getSqlViews({ database });
         if (views.error) {
             console.log(views.error);
         }
-        shared.callGetSqlTables({ action: 'available-data-in-views', data: views.rows, currDatabase: database });
+        shared.callGetSqlTables({
+            action: 'available-data-in-views',
+            data: views.rows,
+            currDatabase: database
+        });
     }
 
     return (
