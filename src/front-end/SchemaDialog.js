@@ -29,7 +29,8 @@ class SchemaDialog extends React.Component {
                 </DialogTitle>
                 <Divider sx={{ mb: 2 }} />
                 <Box className='boxMsg'>
-                    You're connected to database, Please select from the available Schemas and connect again
+                    You're connected to database
+                    <p>Please select from the available Schemas and connect again</p>
                 </Box>
             </Box>
         );
