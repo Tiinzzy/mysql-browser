@@ -3,7 +3,7 @@ export const SIZES = {
     leftBoxWidth: 300,
     getRightBoxWidth: function() {
         let width = window.innerWidth - 40;
-        return width - this.leftBoxWidth;
+        return width - this.leftBoxWidth - 10;
     },
     minWidth: 1280
 };
