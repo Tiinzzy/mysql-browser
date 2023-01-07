@@ -7,6 +7,7 @@ import Divider from '@mui/material/Divider';
 import ConnectionInfo from './ConnectionInfo';
 import QueryWindow from './QueryWindow';
 import GetSqlTables from './GetSqlTables';
+import Footer from './Footer';
 
 import { SIZES, rightBoxStyle } from './functions';
 
@@ -15,14 +16,15 @@ const leftBoxStyle = {
     border: 'solid 1px #eaeaea',
     borderRadius: 3,
     flexDirection: 'column',
-    marginTop: 28,
+    marginTop: 19,
     width: SIZES.leftBoxWidth,
-    maxHeight: 865
+    maxHeight: 865,
+    marginRight: 10
 }
 
 export default function MainPage() {
     const [queryOk, setQueryOk] = useState(false);
-    const [width, setWidth] = useState(window.innerWidth - 20);
+    const [width, setWidth] = useState(SIZES.getRightBoxWidth() + SIZES.leftBoxWidth);
 
     window.addEventListener("resize", handleScreenResize);
 
@@ -35,16 +37,18 @@ export default function MainPage() {
     }
 
     return (
-        <Box style={rightBoxStyle(width)}>
-            <Box style={leftBoxStyle}>
-                <GetSqlTables />
+        <>
+            <Box style={rightBoxStyle(width)} sx={{mt:10}}>
+                <Box style={leftBoxStyle}>
+                    <GetSqlTables />
+                </Box>
+                <Box flexGrow={1} style={{ margin: 0 }}>
+                    <ConnectionInfo callSetQueryOk={callSetQueryOk} width={SIZES.getRightBoxWidth()} />
+                    <Divider sx={{ mt: 2, mb: 2 }} />
+                    {queryOk && <QueryWindow />}
+                </Box>
             </Box>
-            <Box flexGrow={1} style={{ margin: 10 }}>
-                <ConnectionInfo callSetQueryOk={callSetQueryOk} width={SIZES.getRightBoxWidth()} />
-                <Divider sx={{ mt: 2, mb: 2 }} />
-                {queryOk && <QueryWindow />}
-            </Box>
-        </Box>
-
+            <Footer/>
+        </>
     );
 }
