@@ -7,10 +7,12 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Dialog from "@mui/material/Dialog";
 
 import { SIZES, shared } from './functions';
 
 import BackEndConnection from './BackEndConnection';
+import SchemaDialog from './SchemaDialog';
 
 const backend = BackEndConnection.INSTANCE();
 const STATUS_CONNECTED = 'Connected to ';
@@ -28,6 +30,7 @@ export default function ConnectionInfo(props) {
     const [selected, setSelected] = useState('');
     const [user, setUser] = useState('dbadmin');
     const [password, setPassword] = useState('washywashy');
+    const [openDialog, setOpenDialog] = useState(false);
 
     shared.callConnectionInfo = callConnectionInfo;
 
@@ -53,6 +56,8 @@ export default function ConnectionInfo(props) {
         let connectionStatus = await backend.connect({ host, selected, user, password });
         setStatus(connectionStatus ? STATUS_CONNECTED + selected + ' Database' : STATUS_NOT_CONNECTED);
         props.callSetQueryOk(connectionStatus);
+
+        setOpenDialog(true);
 
         let sql = 'SHOW DATABASES'
         let loadDatabase = await backend.executeSql({ sql });
@@ -89,6 +94,10 @@ export default function ConnectionInfo(props) {
         }
     }
 
+    function closeDialog() {
+        setOpenDialog(false);
+    }
+
     return (
         <>
             <Box display='flex' style={{ width: SIZES.getRightBoxWidth() }}>
@@ -98,7 +107,7 @@ export default function ConnectionInfo(props) {
                 </Box>
                 {database !== null &&
                     <Box style={boxStyle}>
-                        <div>Database:</div>
+                        <div>Schemas:</div>
                         <FormControl style={{ width: 200 }}>
                             <Select
                                 displayEmpty
@@ -128,6 +137,10 @@ export default function ConnectionInfo(props) {
             <Box sx={{ mt: 2.5 }}>
                 Connection Status: <span style={{ color: status === STATUS_CONNECTED + selected + ' Database' ? 'green' : 'red', marginLeft: 10 }}> {status} </span>
             </Box>
+
+            {openDialog && !selected && <Dialog onClose={() => closeDialog()} open={openDialog} maxWidth='sm'>
+                <SchemaDialog closeDialog={closeDialog}/>
+            </Dialog>}
         </>
     );
 }
