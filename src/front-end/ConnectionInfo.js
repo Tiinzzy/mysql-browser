@@ -15,7 +15,7 @@ import BackEndConnection from './BackEndConnection';
 import SchemaDialog from './SchemaDialog';
 
 const backend = BackEndConnection.INSTANCE();
-const STATUS_CONNECTED = 'Connected to ';
+const STATUS_CONNECTED = 'Connected ';
 const STATUS_NOT_CONNECTED = 'Not Connected';
 const FORBIDDEN_DBS = ['information_schema', 'performance_schema'];
 
@@ -31,6 +31,7 @@ export default function ConnectionInfo(props) {
     const [user, setUser] = useState('dbadmin');
     const [password, setPassword] = useState('washywashy');
     const [openDialog, setOpenDialog] = useState(false);
+    const [schema, setSchema] = useState('');
 
     shared.callConnectionInfo = callConnectionInfo;
 
@@ -42,6 +43,7 @@ export default function ConnectionInfo(props) {
         } else if (e.target.name === "database") {
             setStatus(STATUS_NOT_CONNECTED);
             setSelected(e.target.value);
+            setSchema(e.target.value);
         } else if (e.target.name === 'user') {
             setUser(e.target.value);
         } else if (e.target.name === 'password') {
@@ -54,7 +56,7 @@ export default function ConnectionInfo(props) {
 
     async function connectToMysql(e) {
         let connectionStatus = await backend.connect({ host, selected, user, password });
-        setStatus(connectionStatus ? STATUS_CONNECTED + selected + ' Database' : STATUS_NOT_CONNECTED);
+        setStatus(connectionStatus ? STATUS_CONNECTED : STATUS_NOT_CONNECTED);
         props.callSetQueryOk(connectionStatus);
 
         setOpenDialog(true);
@@ -135,11 +137,12 @@ export default function ConnectionInfo(props) {
                 </Box>
             </Box>
             <Box sx={{ mt: 2.5 }}>
-                Connection Status: <span style={{ color: status === STATUS_CONNECTED + selected + ' Database' ? 'green' : 'red', marginLeft: 10 }}> {status} </span>
+                Connection Status: {!selected ? <span style={{ color: status === STATUS_CONNECTED ? 'green' : 'red', marginLeft: 10 }}> {status} to Database</span> :
+                    <span style={{ color: status === STATUS_CONNECTED ? 'green' : 'red', marginLeft: 10 }}> {status} {!selected || ('to ' + schema + ' Schema')}</span>}
             </Box>
 
             {openDialog && !selected && <Dialog onClose={() => closeDialog()} open={openDialog} maxWidth='sm'>
-                <SchemaDialog closeDialog={closeDialog}/>
+                <SchemaDialog closeDialog={closeDialog} />
             </Dialog>}
         </>
     );
