@@ -64,7 +64,7 @@ export default function QueryWindow(props) {
                     variant="outlined"
                     value={sql}
                     multiline
-                    rows={8}
+                    rows={6}
                     onChange={(e) => sqlChanged(e)} />
             </Box>
 
